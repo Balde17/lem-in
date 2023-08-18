@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -138,34 +137,49 @@ func Association(current string, filename string) []string {
 	return el
 }
 
-func deleteDuplicatePaths(allPaths [][]string, startRoom, endRoom string) ([][]string, error) {
-	answer := [][]string{}
-	if len(allPaths) != 0 {
+func removeCrossingPaths(allPaths [][]string, startRoom, endRoom string) [][]string {
+	// Créez une nouvelle liste vide pour stocker les chemins filtrés
+	filteredPaths := make([][]string, 0)
 
-		temp := allPaths[0]
-		for j := 0; j < len(allPaths); j++ {
-			for i := 0; i < len(allPaths); i++ {
-				fmt.Println(intersectionPaths(temp, allPaths[i]))
-				if intersectionPaths(temp, allPaths[i]) {
+	// Parcourez tous les chemins dans allPaths
+	for _, path := range allPaths {
+		// Si le chemin ne se croise pas avec les chemins déjà filtrés
+		if !isCrossing(path, filteredPaths, startRoom, endRoom) {
+			// Ajoutez ce chemin à la liste des chemins filtrés
+			filteredPaths = append(filteredPaths, path)
+		}
+	}
 
-					answer = append(answer, temp)
-					temp = allPaths[i]
+	// Renvoyez la liste des chemins filtrés
+	return filteredPaths
+}
+
+func isCrossing(path []string, existingPaths [][]string, startRoom, endRoom string) bool {
+	// Parcourez tous les chemins existants
+	for _, existingPath := range existingPaths {
+		// Si le chemin actuel se croise avec l'un des chemins existants
+		if isPathCrossing(path, existingPath, startRoom, endRoom) {
+			// Renvoyez true pour indiquer qu'il y a un croisement
+			return true
+		}
+	}
+	// Si le chemin ne se croise avec aucun chemin existant
+	return false
+}
+
+func isPathCrossing(pathA, pathB []string, startRoom, endRoom string) bool {
+	// Parcourez les salles du premier chemin
+	for _, roomA := range pathA {
+		// Parcourez les salles du deuxième chemin
+		for _, roomB := range pathB {
+			// Si une salle commune est trouvée, cela signifie que les chemins se croisent
+			if roomA == roomB {
+				if roomA != startRoom && roomA != endRoom {
+					return true
 				}
 			}
 		}
 	}
-
-	return answer, nil
-}
-
-func intersectionPaths(temp, path []string) bool {
-
-	for i := 1; i < len(temp)-1; i++ {
-		for j := 1; j < len(path)-1; j++ {
-			if path[j] == temp[i] && j != i {
-				return true
-			}
-		}
-	}
+	// Si aucune salle commune n'est trouvée, les chemins ne se croisent pas
 	return false
 }

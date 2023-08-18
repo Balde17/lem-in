@@ -17,10 +17,10 @@ func main() {
 
 	findPaths(filePath, startRoom, endRoom, visited, currentPath, &allPaths)
 
-	validPaths, _ := deleteDuplicatePaths(allPaths, startRoom, endRoom)
-	fmt.Println(validPaths)
+	validPaths := removeCrossingPaths(allPaths, startRoom, endRoom)
+	//fmt.Println(validPaths)
 
-	for _, path := range allPaths {
+	for _, path := range validPaths {
 		fmt.Println("Chemin trouvé:", path)
 	}
 

@@ -57,7 +57,7 @@ func RecuperationInFile(filename string) InformationsInFile {
 			}
 
 		}
-		if countainSpace(scanner.Text()) && boolean == false {
+		if countainSpace(scanner.Text()) && !boolean {
 			tampon := strings.Split(scanner.Text(), " ")
 			roomtampon := Room{}
 			if len(tampon) == 3 {
@@ -68,7 +68,8 @@ func RecuperationInFile(filename string) InformationsInFile {
 			}
 			data.rooms = append(data.rooms, roomtampon)
 		}
-		if countainTiret(scanner.Text()) && boolean == false {
+		if countainTiret(scanner.Text()) && !boolean {
+
 			tampon := strings.Split(scanner.Text(), "-")
 			linktampon := LinksInRooms{}
 			if len(tampon) == 2 {
@@ -143,10 +144,12 @@ func removeCrossingPaths(allPaths [][]string, startRoom, endRoom string) [][]str
 
 	// Parcourez tous les chemins dans allPaths
 	for _, path := range allPaths {
-		// Si le chemin ne se croise pas avec les chemins déjà filtrés
+		// Si le chemin ne se croise pas avec les chemins déjà filtrésP
+
 		if !isCrossing(path, filteredPaths, startRoom, endRoom) {
 			// Ajoutez ce chemin à la liste des chemins filtrés
 			filteredPaths = append(filteredPaths, path)
+			
 		}
 	}
 
@@ -156,6 +159,7 @@ func removeCrossingPaths(allPaths [][]string, startRoom, endRoom string) [][]str
 
 func isCrossing(path []string, existingPaths [][]string, startRoom, endRoom string) bool {
 	// Parcourez tous les chemins existants
+
 	for _, existingPath := range existingPaths {
 		// Si le chemin actuel se croise avec l'un des chemins existants
 		if isPathCrossing(path, existingPath, startRoom, endRoom) {
@@ -173,10 +177,10 @@ func isPathCrossing(pathA, pathB []string, startRoom, endRoom string) bool {
 		// Parcourez les salles du deuxième chemin
 		for _, roomB := range pathB {
 			// Si une salle commune est trouvée, cela signifie que les chemins se croisent
-			if roomA == roomB {
-				if roomA != startRoom && roomA != endRoom {
-					return true
-				}
+			if roomA == roomB && roomA != startRoom && roomA != endRoom {
+
+				return true
+
 			}
 		}
 	}

@@ -28,4 +28,7 @@ func main() {
 		fmt.Println("Chemin trouvé:", path)
 	}
 
+	allPathsByRooms := stringPathToRoomPath(validPaths)
+	fmt.Println(allPathsByRooms)
+
 }

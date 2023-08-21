@@ -4,11 +4,13 @@ type Room struct {
 	name    string
 	coord_x int
 	coord_y int
+	Visited bool
 }
 
 type LinksInRooms struct {
 	room1 string
 	room2 string
+	
 }
 
 type InformationsInFile struct {
@@ -17,4 +19,9 @@ type InformationsInFile struct {
 	links          []LinksInRooms
 	start          Room
 	end            Room
+}
+
+type Ant struct{
+	ID int
+	Position Room
 }

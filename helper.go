@@ -205,3 +205,71 @@ func TriAllPaths(allPaths [][]string) [][]string {
 	}
 	return allPaths
 }
+
+func stringPathToRoomPath(allPaths [][]string) [][]Room{
+	var pathByRooms []Room
+	var allPathsByRooms [][] Room
+
+	for _, path := range allPaths{
+		for _, room := range path{
+			element := Room{
+				name: room,
+				Visited: false,
+			}
+			pathByRooms = append(pathByRooms, element)
+		}
+		allPathsByRooms = append(allPathsByRooms, pathByRooms)
+		pathByRooms = []Room{}
+	}
+	return allPathsByRooms
+}
+
+
+// type Ant struct {
+// 	ID       int
+// 	Position *Room
+// }
+
+// func simulateAntsOptimized(paths [][]*Room, antsCount int) {
+// 	// Initialisation des fourmis
+// 	ants := make([]Ant, antsCount)
+// 	for i := 0; i < antsCount; i++ {
+// 		ants[i] = Ant{
+// 			ID:       i + 1,
+// 			Position: paths[0][0], // Toutes les fourmis commencent à la première salle du premier chemin
+// 		}
+// 		ants[i].Position.Visited = true // Marquer la pièce comme visitée par une fourmi
+// 	}
+
+// 	// Simulation du déplacement des fourmis
+// 	for _, path := range paths {
+// 		// Boucle pour gérer chaque étape de la salle
+// 		for step := 1; step < len(path); step++ {
+// 			// Boucle pour chaque fourmi
+// 			for i := range ants {
+// 				if ants[i].Position == path[step-1] && ants[i].Position != path[step] {
+// 					if ants[i].Position.Visited {
+// 						// Libérer la pièce précédente
+// 						ants[i].Position.Visited = false
+// 					}
+// 					if !path[step].Visited {
+// 						// Si la pièce actuelle n'a pas déjà une fourmi, la marquer comme visitée
+// 						ants[i].Position = path[step]
+// 						ants[i].Position.Visited = true
+// 					}
+// 				}
+// 			}
+// 		}
+// 		// Afficher l'état des fourmis à chaque étape
+// 		printAntsState(ants)
+// 	}
+// }
+
+// func printAntsState(ants []Ant) {
+// 	// Afficher l'état de chaque fourmi
+// 	for _, ant := range ants {
+// 		fmt.Printf("Ant %d is in room %s\n", ant.ID, ant.Position.Name)
+// 	}
+// 	fmt.Println() // Ligne vide pour séparer les étapes
+// }
+

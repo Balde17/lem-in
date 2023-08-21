@@ -5,6 +5,7 @@ type Room struct {
 	coord_x int
 	coord_y int
 	Visited bool
+	Ants int
 }
 
 type LinksInRooms struct {
@@ -22,6 +23,10 @@ type InformationsInFile struct {
 }
 
 type Ant struct{
-	ID int
-	Position Room
+	Id          int
+	Path        []Room
+	CurrentRoom Room
+	RoomsPassed int
 }
+
+var ANTCOUNTER int

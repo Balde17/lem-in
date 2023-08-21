@@ -2,8 +2,9 @@ package main
 
 import (
 	"bufio"
-	"fmt"
+	"math"
 	"os"
+	"reflect"
 	"strconv"
 	"strings"
 )
@@ -143,7 +144,7 @@ func removeCrossingPaths(allPaths [][]string, startRoom, endRoom string) [][]str
 	filteredPaths := make([][]string, 0)
 	// Parcourez tous les chemins dans allPaths
 	for _, path := range allPaths {
-		
+
 		// Si le chemin ne se croise pas avec les chemins déjà filtrés
 		if !isCrossing(path, filteredPaths, startRoom, endRoom) {
 			// Ajoutez ce chemin à la liste des chemins filtrés
@@ -161,12 +162,9 @@ func isCrossing(path []string, existingPaths [][]string, startRoom, endRoom stri
 		// Si le chemin actuel se croise avec l'un des chemins existants
 		if isPathCrossing(path, existingPath, startRoom, endRoom) {
 			// Renvoyez true pour indiquer qu'il y a un croisement
-			fmt.Println("cossing on ",path)
-
 			return true
 		}
 	}
-	fmt.Println("No cross on ", path)
 	// Si le chemin ne se croise avec aucun chemin existant
 	return false
 }
@@ -178,7 +176,7 @@ func isPathCrossing(pathA, pathB []string, startRoom, endRoom string) bool {
 	// }
 	// Parcourez les salles du premier chemin
 	for _, roomA := range pathA {
-		if roomA == startRoom || roomA == endRoom{
+		if roomA == startRoom || roomA == endRoom {
 			continue
 		}
 		// Parcourez les salles du deuxième chemin
@@ -206,14 +204,14 @@ func TriAllPaths(allPaths [][]string) [][]string {
 	return allPaths
 }
 
-func stringPathToRoomPath(allPaths [][]string) [][]Room{
+func stringPathToRoomPath(allPaths [][]string) [][]Room {
 	var pathByRooms []Room
-	var allPathsByRooms [][] Room
+	var allPathsByRooms [][]Room
 
-	for _, path := range allPaths{
-		for _, room := range path{
+	for _, path := range allPaths {
+		for _, room := range path {
 			element := Room{
-				name: room,
+				name:    room,
 				Visited: false,
 			}
 			pathByRooms = append(pathByRooms, element)
@@ -224,52 +222,75 @@ func stringPathToRoomPath(allPaths [][]string) [][]Room{
 	return allPathsByRooms
 }
 
+// Makes list of ants with own path, current room and id
+func SpawnAnts(paths [][]Room, numberOfAnt int) []Ant {
+	var result []Ant
+	for i := 1; i < numberOfAnt+1; i++ {
+		var antToAppend Ant
 
-// type Ant struct {
-// 	ID       int
-// 	Position *Room
-// }
+		antToAppend.Id = i
+		antToAppend.CurrentRoom = paths[0][0]
+		antToAppend.Path = getIdealPath(paths, result)
 
-// func simulateAntsOptimized(paths [][]*Room, antsCount int) {
-// 	// Initialisation des fourmis
-// 	ants := make([]Ant, antsCount)
-// 	for i := 0; i < antsCount; i++ {
-// 		ants[i] = Ant{
-// 			ID:       i + 1,
-// 			Position: paths[0][0], // Toutes les fourmis commencent à la première salle du premier chemin
+		result = append(result, antToAppend)
+	}
+
+	return result
+}
+
+func getIdealPath(paths [][]Room, result []Ant) []Room {
+	counter := 0
+	mapPath := make(map[int][]Room)
+	for _, path := range paths {
+		counter = len(path)
+		for _, ant := range result {
+			if reflect.DeepEqual(ant.Path, path) {
+				counter++
+			}
+		}
+		mapPath[counter] = path
+	}
+
+	min := math.MaxInt32
+	for number, _ := range mapPath {
+		if number < min {
+			min = number
+		}
+	}
+	return mapPath[min]
+}
+
+// func MakeStep(ants []Ant, data InformationsInFile) {
+// 	var allPassed bool = true
+// 	var counter int
+
+// 	for i := 0; i < len(ants); i++ {
+// 		if ants[i].CurrentRoom == data.end {
+// 			counter++
+// 			continue
 // 		}
-// 		ants[i].Position.Visited = true // Marquer la pièce comme visitée par une fourmi
-// 	}
 
-// 	// Simulation du déplacement des fourmis
-// 	for _, path := range paths {
-// 		// Boucle pour gérer chaque étape de la salle
-// 		for step := 1; step < len(path); step++ {
-// 			// Boucle pour chaque fourmi
-// 			for i := range ants {
-// 				if ants[i].Position == path[step-1] && ants[i].Position != path[step] {
-// 					if ants[i].Position.Visited {
-// 						// Libérer la pièce précédente
-// 						ants[i].Position.Visited = false
-// 					}
-// 					if !path[step].Visited {
-// 						// Si la pièce actuelle n'a pas déjà une fourmi, la marquer comme visitée
-// 						ants[i].Position = path[step]
-// 						ants[i].Position.Visited = true
-// 					}
-// 				}
+// 		nextRoomId := ants[i].RoomsPassed
+
+// 		if ants[i].Path[nextRoomId].Ants != 0 {
+// 			if ants[i].Path[nextRoomId] != data.end {
+// 				continue
 // 			}
 // 		}
-// 		// Afficher l'état des fourmis à chaque étape
-// 		printAntsState(ants)
-// 	}
-// }
 
-// func printAntsState(ants []Ant) {
-// 	// Afficher l'état de chaque fourmi
-// 	for _, ant := range ants {
-// 		fmt.Printf("Ant %d is in room %s\n", ant.ID, ant.Position.Name)
-// 	}
-// 	fmt.Println() // Ligne vide pour séparer les étapes
-// }
+// 		ants[i].CurrentRoom.Ants--
+// 		ants[i].CurrentRoom = ants[i].Path[nextRoomId]
+// 		ants[i].CurrentRoom.Ants++
+// 		ants[i].RoomsPassed++
+// 		allPassed = false
 
+// 		fmt.Print("L", ants[i].Id, "-", ants[i].CurrentRoom.name, " ")
+// 	}
+// 	if allPassed && data.number_of_ants == counter {
+// 		return
+// 	} else {
+// 		fmt.Println("")
+// 		MakeStep(ants, data)
+// 	}
+
+// }

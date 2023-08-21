@@ -29,6 +29,14 @@ func main() {
 	}
 
 	allPathsByRooms := stringPathToRoomPath(validPaths)
-	fmt.Println(allPathsByRooms)
+	//fmt.Println(allPathsByRooms)
+
+	allAnts := SpawnAnts(allPathsByRooms, data.number_of_ants)
+	
+	for _, p := range allAnts{
+		fmt.Println(p.Id, p.Path)
+	}
+
+	//MakeStep(allAnts, data)
 
 }

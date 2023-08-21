@@ -16,8 +16,9 @@ func main() {
 	allPaths := [][]string{}
 
 	findPaths(filePath, startRoom, endRoom, visited, currentPath, &allPaths)
+	sortedPaths := TriAllPaths(allPaths)
 
-	validPaths := removeCrossingPaths(allPaths, startRoom, endRoom)
+	validPaths := removeCrossingPaths(sortedPaths, startRoom, endRoom)
 	//fmt.Println(validPaths)
 
 	for _, path := range validPaths {

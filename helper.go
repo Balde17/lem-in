@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -69,7 +70,6 @@ func RecuperationInFile(filename string) InformationsInFile {
 			data.rooms = append(data.rooms, roomtampon)
 		}
 		if countainTiret(scanner.Text()) && !boolean {
-
 			tampon := strings.Split(scanner.Text(), "-")
 			linktampon := LinksInRooms{}
 			if len(tampon) == 2 {
@@ -141,15 +141,13 @@ func Association(current string, filename string) []string {
 func removeCrossingPaths(allPaths [][]string, startRoom, endRoom string) [][]string {
 	// Créez une nouvelle liste vide pour stocker les chemins filtrés
 	filteredPaths := make([][]string, 0)
-
 	// Parcourez tous les chemins dans allPaths
 	for _, path := range allPaths {
-		// Si le chemin ne se croise pas avec les chemins déjà filtrésP
-
+		
+		// Si le chemin ne se croise pas avec les chemins déjà filtrés
 		if !isCrossing(path, filteredPaths, startRoom, endRoom) {
 			// Ajoutez ce chemin à la liste des chemins filtrés
 			filteredPaths = append(filteredPaths, path)
-			
 		}
 	}
 
@@ -159,31 +157,51 @@ func removeCrossingPaths(allPaths [][]string, startRoom, endRoom string) [][]str
 
 func isCrossing(path []string, existingPaths [][]string, startRoom, endRoom string) bool {
 	// Parcourez tous les chemins existants
-
 	for _, existingPath := range existingPaths {
 		// Si le chemin actuel se croise avec l'un des chemins existants
 		if isPathCrossing(path, existingPath, startRoom, endRoom) {
 			// Renvoyez true pour indiquer qu'il y a un croisement
+			fmt.Println("cossing on ",path)
+
 			return true
 		}
 	}
+	fmt.Println("No cross on ", path)
 	// Si le chemin ne se croise avec aucun chemin existant
 	return false
 }
 
 func isPathCrossing(pathA, pathB []string, startRoom, endRoom string) bool {
+	//verifier si il nya pas de chevauchement
+	// if pathA[0] == pathB[0] || pathA[len(pathA)-1] == pathB[len(pathB)-1] {
+	// 	return true
+	// }
 	// Parcourez les salles du premier chemin
 	for _, roomA := range pathA {
+		if roomA == startRoom || roomA == endRoom{
+			continue
+		}
 		// Parcourez les salles du deuxième chemin
 		for _, roomB := range pathB {
 			// Si une salle commune est trouvée, cela signifie que les chemins se croisent
-			if roomA == roomB && roomA != startRoom && roomA != endRoom {
-
+			if roomA == roomB {
 				return true
-
 			}
 		}
 	}
 	// Si aucune salle commune n'est trouvée, les chemins ne se croisent pas
 	return false
+}
+
+func TriAllPaths(allPaths [][]string) [][]string {
+	for i := 0; i < len(allPaths); i++ {
+		for j := 0; j < len(allPaths); j++ {
+			if len(allPaths[i]) < len(allPaths[j]) {
+				temp := allPaths[i]
+				allPaths[i] = allPaths[j]
+				allPaths[j] = temp
+			}
+		}
+	}
+	return allPaths
 }

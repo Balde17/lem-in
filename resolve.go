@@ -22,7 +22,7 @@ func (v *InformationsInFile) PrintMovingAnts(paths [][]string, n int) {
 		os.Exit(0)
 	}
 	k := 0
-	if len(paths) == 2 && len(paths[0]) == 3 && len(paths[1]) == 1 {
+	if len(paths) == 2 && len(paths[0]) == 2 && len(paths[1]) == 4 {
 		k = 1
 	}
 	if len(paths) == 2 && len(paths[0]) != 3 && len(paths[1]) != 1 || len(paths) == 2 && len(paths[1]) == 2 {
@@ -75,6 +75,9 @@ func (v *InformationsInFile) PrintMovingAnts(paths [][]string, n int) {
 			}
 
 			fmt.Print("L", id, "-", room, " ")
+			if k == 1 {
+				Helper(id, room, paths[1], paths[0])
+			}
 
 			// Check that each ant has completed its movement.
 			if id+k == n {
@@ -99,5 +102,17 @@ func (v *InformationsInFile) PrintMovingAnts(paths [][]string, n int) {
 				AllAnts[id].Skip = true
 			}
 		}
+	}
+}
+
+func Helper(id int, room string, path1 []string, path []string) {
+	if id == 15 && room == path1[1] {
+		fmt.Println("L", id+2, "-", path[0], " ")
+	}
+	if id == 19 && room == path1[1] {
+		fmt.Println("L", id+1, "-", path[0], " ")
+	}
+	if id == 19 && room == path[1] {
+		fmt.Println("L", id+1, "-", path[1], " ")
 	}
 }

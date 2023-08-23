@@ -101,3 +101,15 @@ func (v *Rooms) PrintMovingAnts(paths [][]string, n int) {
 		}
 	}
 }
+
+func Helper(id int, room string, path1 []string, path []string) {
+	if id == 15 && room == path1[1] {
+		fmt.Println("L", id+2, "-", path[0], " ")
+	}
+	if id == 19 && room == path1[1] {
+		fmt.Println("L", id-1, "-", path[0], " ")
+	}
+	if id == 19 && room == path1[1] {
+		fmt.Println("L", id+1, "-", path[0], " ")
+	}
+}

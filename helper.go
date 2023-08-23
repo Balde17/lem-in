@@ -252,7 +252,7 @@ func getIdealPath(paths [][]Room, result []Ant) []Room {
 	}
 
 	min := math.MaxInt32
-	for number, _ := range mapPath {
+	for number := range mapPath {
 		if number < min {
 			min = number
 		}
@@ -294,3 +294,8 @@ func getIdealPath(paths [][]Room, result []Ant) []Room {
 // 	}
 
 // }
+
+
+ func MakeStep(ants []Ant, data InformationsInFile) {
+	 
+ }

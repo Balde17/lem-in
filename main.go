@@ -28,15 +28,6 @@ func main() {
 		fmt.Println("Chemin trouvé:", path)
 	}
 
-	allPathsByRooms := stringPathToRoomPath(validPaths)
-	//fmt.Println(allPathsByRooms)
-
-	allAnts := SpawnAnts(allPathsByRooms, data.number_of_ants)
-	
-	for _, p := range allAnts{
-		fmt.Println(p.Id, p.Path)
-	}
-
 	//MakeStep(allAnts, data)
-
+	data.PrintMovingAnts(validPaths, data.number_of_ants)
 }

@@ -1,4 +1,4 @@
-<h1 align="center">ASCII-ART-WEB</h1>
+<h1 align="center">LEM-IN</h1>
 
 ## About The Project
 This project is meant to make you code a digital version of an ant farm.

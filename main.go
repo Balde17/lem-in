@@ -2,32 +2,31 @@ package main
 
 import (
 	"fmt"
+	lemIn "lem/functions"
 	"os"
 )
 
 func main() {
 
-	filePath := os.Args[1]
-	data := RecuperationInFile(filePath)
-	startRoom := data.start.name
-	endRoom := data.end.name
-	visited := make(map[string]bool)
-	currentPath := []string{}
-	allPaths := [][]string{}
+	if len(os.Args) == 2 {
+		if lemIn.IsLemInFileCorect(os.Args[1]) {
+			err := lemIn.CheckDuplicateRooms(lemIn.FilePath + os.Args[1])
+			if err != nil {
+				fmt.Println(err)
+				os.Exit(0)
+			}
+			Tab := lemIn.Tourn(os.Args[1])
+			lemIn.DiplayFile(os.Args[1])
 
-	findPaths(filePath, startRoom, endRoom, visited, currentPath, &allPaths)
-	if len(allPaths) != 9 {
-		allPaths = TriAllPaths(allPaths)
+			lemIn.DisplayPaths(Tab)
+		} else {
+			fmt.Println("ERROR: invalid data format")
+			return
+		}
 
+	} else {
+		fmt.Println("ERROR: invalid arguments,only 2 arguments!!!")
+		return
 	}
 
-	validPaths := removeCrossingPaths(allPaths, startRoom, endRoom)
-	//fmt.Println(validPaths)
-
-	for _, path := range validPaths {
-		fmt.Println("Chemin trouvé:", path)
-	}
-
-	//MakeStep(allAnts, data)
-	data.PrintMovingAnts(validPaths, data.number_of_ants)
 }
